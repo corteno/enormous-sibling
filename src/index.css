@@ -1,0 +1,27 @@
+#root{
+    width: 100%;
+    height: auto;
+    justify-content: center;
+}
+
+@font-face {
+    font-family: OpensansRegular;
+    src: url("./fonts/OpenSans-Regular.ttf");
+}
+
+@font-face {
+    font-family: OpensansLight;
+    src: url("./fonts/OpenSans-Light.ttf");
+}
+
+@font-face {
+    font-family: OpensansBold;
+    src: url("./fonts/OpenSans-Bold.ttf");
+}
+
+@font-face {
+    font-family: OpensansSemiBold;
+    src: url("./fonts/OpenSans-SemiBold.ttf");
+}
+
+
