@@ -28,8 +28,12 @@ a {
     display: inline-flex;
 }
 
-input[type="submit"] {
+input[type="submit"], input[type="checkbox"], button {
     cursor: pointer;
+}
+
+button:focus{
+    outline: none;
 }
 
 h1, h2, h3, h4 {
@@ -83,6 +87,12 @@ textarea:focus {
     align-items: center;
 }
 
+.hide{
+    position: fixed;
+    opacity: 0;
+    pointer-events: none;
+}
+
 /*=====================================
 # Header
 =======================================*/
@@ -125,7 +135,8 @@ textarea:focus {
     padding: 0 20px;
 }
 
-.app-content-wrapper label {
+.translate-wrapper {
+    align-self: flex-start;
     width: 40%;
 }
 
@@ -135,23 +146,67 @@ textarea:focus {
     width: 100%;
 }
 
-.translate-button {
-    height: 50px;
-    max-width: 200px;
-    width: 100%;
+.translate-button, .copy-text-button{
     justify-content: center;
     background: #FA8072;
     border: none;
     border-radius: 4px;
     color: #f2f2f2;
     font-size: 16px;
-    margin: 0 10px;
-
     transition: 0.2s all;
 }
 
-.translate-button:hover {
+.translate-button {
+    height: 50px;
+    max-width: 200px;
+    width: 100%;
+    margin: 0 10px;
+}
+
+.translate-button:hover, .copy-text-button:hover {
     background: #d06868;
+}
+
+.copy-wrapper{
+    margin-top: 10px;
+}
+
+.copy-all-label{
+    height: auto;
+    align-items: center;
+}
+
+input[type='checkbox']{
+    position: relative;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 4px;
+    border: 2px solid #fa8072;
+    transition: 0.2s;
+}
+
+input[type="checkbox"]:checked{
+    background: #fa8072;
+}
+
+input[type="checkbox"]:checked:after{
+    position: absolute;
+    content: '';
+    width: 10px;
+    height: 5px;
+    top: 3px;
+    left: 2px;
+    transform: rotateZ(-45deg);
+    border-left: 2px solid #f2f2f2;
+    border-bottom: 2px solid #f2f2f2;
+}
+
+.copy-text-button{
+    height: 40px;
+    width: 100px;
+    margin-left: auto;
 }
 
 /*=====================================
@@ -210,7 +265,7 @@ footer {
         flex-direction: column;
     }
 
-    .app-content-wrapper label{
+    .translate-wrapper{
         width: 100%;
         min-height: 100px;
     }

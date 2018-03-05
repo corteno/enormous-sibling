@@ -8,8 +8,11 @@ class App extends Component {
 
         this.state = {
             translateText: '',
-            translatedText: ''
+            translatedText: '',
+            copyText: '',
+            copyOriginal: false
         };
+
     }
 
     sliceWords = (text) => {
@@ -42,7 +45,6 @@ class App extends Component {
                 translatedWordsArray.push(word);
             }
 
-
         });
 
         for (let i = 0; i < originalWordsArray.length; i++) {
@@ -56,22 +58,60 @@ class App extends Component {
                     .charAt(0).toUpperCase() + translatedWordsArray[i].slice(1, translatedWordsArray[i].length);
             }
 
+            //In case that the word has punctuation and there is no synonym.
             let translationHasPunctuation = /(?:[A-Za-z]!)|(?:[A-Za-z],)|(?:[A-Za-z]\.)|(?:[A-Za-z]\?)/.test(translatedWordsArray[i]);
-            if(wordHasPunctuation && !translationHasPunctuation){
+            if (wordHasPunctuation && !translationHasPunctuation) {
                 console.log(translatedWordsArray[i]);
-                translatedWordsArray[i] += originalWordsArray[i].charAt(originalWordsArray[i].length-1);
+                translatedWordsArray[i] += originalWordsArray[i].charAt(originalWordsArray[i].length - 1);
             }
         }
-
-        //console.log(translatedWordsArray);
-
         this.setState({translatedText: translatedWordsArray.join(' ')});
-
     };
 
     onInputChange = (e) => {
-        this.setState({translateText: e.target.value});
+        switch (e.target.name) {
+            case 'translate':
+                this.setState({translateText: e.target.value});
+                break;
+
+            case 'copy-all':
+                this.setState({copyOriginal: !this.state.copyOriginal});
+                break;
+
+            default:
+                break;
+        }
+
     };
+
+    onCopyButtonClick = (e) => {
+        e.preventDefault();
+        this.setState({copying: true});
+
+        if (this.state.copyOriginal) {
+            this.setState({copyText: this.state.translateText + ' -> ' + this.state.translatedText}, () => {
+                console.log(this.copyInput);
+
+                this.copyInput.select();
+                document.execCommand('copy');
+
+                this.setState({copying: false});
+            });
+        } else {
+            this.setState({copyText: this.state.translatedText}, () => {
+                console.log(this.copyInput);
+
+                this.copyInput.select();
+                document.execCommand('copy');
+
+                this.setState({copying: false});
+            });
+        }
+    };
+
+    componentDidMount() {
+        this.translateTextarea.focus();
+    }
 
     render() {
         return (
@@ -84,25 +124,51 @@ class App extends Component {
                     <form action="" className="translate-form" onSubmit={(e) => {
                         this.translate(e)
                     }}>
-                        <label htmlFor="translate" className='col'>
+                        <label htmlFor="translate" className='translate-wrapper col'>
                             Text to translate:
                             <textarea name="translate" id="" cols="30" rows="10" className="translate"
                                       onChange={(e) => this.onInputChange(e)}
                                       value={this.state.translateText}
+                                      ref={(textarea) => {
+                                          this.translateTextarea = textarea
+                                      }}
                             />
                         </label>
                         <input type="submit" className="translate-button" value='Translate'/>
-                        <label htmlFor="translated-text" className='col'>
+                        <label htmlFor="translated-text" className='translate-wrapper col'>
                             Translated text:
                             <textarea name="translated-text" id="" cols="30" rows="10" className="translated-text"
                                       value={this.state.translatedText}
+
                                       disabled/>
+                            <div className='copy-wrapper'>
+                                <label htmlFor="copy-all" className='copy-all-label'
+                                       defaultChecked={this.state.copyOriginal}
+                                       onChange={(e) => this.onInputChange(e)}>
+                                    <p>Copy with original</p>
+                                    <input type="checkbox" name='copy-all' className="copy-all-checkbox"/>
+                                </label>
+                                <button className="copy-text-button"
+                                        onClick={(e) => this.onCopyButtonClick(e)}
+                                >Copy text
+                                </button>
+                            </div>
                         </label>
                     </form>
+                    {this.state.copying ?
+                        <input type="text" className='hide' value={this.state.copyText}
+                               readOnly={true}
+                               ref={(input) => {
+                                   this.copyInput = input
+                               }}
+                        />
+                        : ''
+                    }
                 </section>
                 <footer>
                     <p className="made-by">
-                        Made by <a href="https://borsodidavid.com" target='_blank'>Borsodi Dávid</a>
+                        Made by <a href="https://borsodidavid.com" target='_blank' rel="noopener noreferrer">Borsodi
+                        Dávid</a>
                         © {new Date().getFullYear()}
                     </p>
                 </footer>
