@@ -90,7 +90,6 @@ class App extends Component {
 
         if (this.state.copyOriginal) {
             this.setState({copyText: this.state.translateText + ' -> ' + this.state.translatedText}, () => {
-                console.log(this.copyInput);
 
                 this.copyInput.select();
                 document.execCommand('copy');
@@ -99,7 +98,6 @@ class App extends Component {
             });
         } else {
             this.setState({copyText: this.state.translatedText}, () => {
-                console.log(this.copyInput);
 
                 this.copyInput.select();
                 document.execCommand('copy');
